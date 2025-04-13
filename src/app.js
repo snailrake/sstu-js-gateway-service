@@ -2,7 +2,6 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
-app.use(express.json());
 
 const serviceRoutes = {
     '/unitservice': process.env.UNIT_SERVICE_URL,
@@ -13,7 +12,8 @@ const serviceRoutes = {
 Object.entries(serviceRoutes).forEach(([path, target]) => {
     app.use(path, createProxyMiddleware({
         target,
-        changeOrigin: true
+        changeOrigin: true,
+        selfHandleResponse: false,
     }));
 });
 
